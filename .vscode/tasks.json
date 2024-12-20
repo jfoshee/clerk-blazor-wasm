@@ -1,0 +1,18 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "serve",
+      "command": "dotnet",
+      "type": "shell",
+      "options": {
+        "cwd": "${workspaceFolder}/try-clerk-frontend"
+      },
+      "args": ["serve"],
+      "presentation": {
+        "reveal": "always"
+      },
+      "problemMatcher": []
+    }
+  ]
+}

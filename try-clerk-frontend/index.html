@@ -38,6 +38,8 @@
           const userButtonDiv = document.getElementById("user-button");
 
           Clerk.mountUserButton(userButtonDiv);
+
+          console.log(Clerk.user);
         } else {
           document.getElementById("app").innerHTML = `
             <div id="sign-in"></div>

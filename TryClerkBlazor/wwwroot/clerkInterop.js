@@ -1,4 +1,7 @@
 window.clerkInterop = {
+  initializeClerk: async () => {
+    await Clerk.load();
+  },
   isUserSignedIn: () => !!Clerk.user,
   mountUserButton: (selector) => {
     const el = document.querySelector(selector);

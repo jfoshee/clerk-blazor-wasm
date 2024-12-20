@@ -10,4 +10,10 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddScoped<IClerkAuthService, ClerkAuthService>();
 
-await builder.Build().RunAsync();
+var app = builder.Build();
+
+// Initialize Clerk for authentication (required for Clerk components)
+var authService = app.Services.GetRequiredService<IClerkAuthService>();
+await authService.InitializeAsync();
+
+await app.RunAsync();

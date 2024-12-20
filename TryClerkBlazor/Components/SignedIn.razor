@@ -1,0 +1,16 @@
+@inject IClerkAuthService AuthService
+
+@if (isSignedIn)
+{
+    @ChildContent
+}
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    bool isSignedIn;
+
+    protected override async Task OnInitializedAsync()
+    {
+        isSignedIn = await AuthService.IsUserSignedInAsync();
+    }
+}

@@ -13,7 +13,7 @@ builder.Services.AddScoped<IClerkAuthService, ClerkAuthService>();
 var app = builder.Build();
 
 // Initialize Clerk for authentication (required for Clerk components)
-var authService = app.Services.GetRequiredService<IClerkAuthService>();
-await authService.InitializeAsync();
+var clerk = app.Services.GetRequiredService<IClerkAuthService>();
+await clerk.InitializeAsync();
 
 await app.RunAsync();

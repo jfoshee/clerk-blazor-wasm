@@ -3,12 +3,10 @@ window.clerkInterop = {
     await Clerk.load();
   },
   isUserSignedIn: () => !!Clerk.user,
-  mountUserButton: (selector) => {
-    const el = document.querySelector(selector);
-    if (el) Clerk.mountUserButton(el);
+  mountUserButton: (element) => {
+    Clerk.mountUserButton(element);
   },
-  mountSignIn: (selector) => {
-    const el = document.querySelector(selector);
-    if (el) Clerk.mountSignIn(el);
+  mountSignIn: (element) => {
+    Clerk.mountSignIn(element);
   },
 };

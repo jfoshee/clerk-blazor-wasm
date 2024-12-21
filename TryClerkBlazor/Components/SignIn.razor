@@ -3,10 +3,11 @@
 
 @if (!isSignedIn)
 {
-    <div id="sign-in"></div>
+    <div @ref="elementRef"></div>
 }
 
 @code {
+    private ElementReference elementRef;
     bool isSignedIn;
     bool mounted;
 
@@ -19,7 +20,7 @@
 
             if (!isSignedIn && !mounted)
             {
-                await JS.InvokeVoidAsync("clerkInterop.mountSignIn", "#sign-in");
+                await JS.InvokeVoidAsync("clerkInterop.mountSignIn", elementRef);
                 mounted = true;
             }
         }

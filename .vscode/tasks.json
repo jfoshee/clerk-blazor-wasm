@@ -2,13 +2,26 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "serve",
+      "label": "serve plain JS app",
       "command": "dotnet",
       "type": "shell",
       "options": {
         "cwd": "${workspaceFolder}/try-clerk-frontend"
       },
       "args": ["serve"],
+      "presentation": {
+        "reveal": "always"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "watch run Blazor app",
+      "command": "dotnet",
+      "type": "shell",
+      "options": {
+        "cwd": "${workspaceFolder}/TryClerkBlazor"
+      },
+      "args": ["watch", "run"],
       "presentation": {
         "reveal": "always"
       },

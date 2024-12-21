@@ -2,11 +2,11 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "serve plain JS app",
+      "label": "serve vanilla JS app",
       "command": "dotnet",
       "type": "shell",
       "options": {
-        "cwd": "${workspaceFolder}/try-clerk-frontend"
+        "cwd": "${workspaceFolder}/try-clerk-vanilla-js"
       },
       "args": ["serve"],
       "presentation": {

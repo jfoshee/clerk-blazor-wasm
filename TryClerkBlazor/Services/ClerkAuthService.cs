@@ -8,14 +8,14 @@ public class ClerkAuthService(IJSRuntime js) : IClerkAuthService
     private readonly IJSRuntime _js = js;
 
     public Task InitializeAsync() =>
-        _js.InvokeVoidAsync("clerkInterop.initializeClerk").AsTask();
+        _js.InvokeVoidAsync("Clerk.load").AsTask();
 
     public Task<bool> IsUserSignedInAsync() =>
         _js.InvokeAsync<bool>("clerkInterop.isUserSignedIn").AsTask();
 
     public Task MountUserButtonAsync(ElementReference element) =>
-        _js.InvokeVoidAsync("clerkInterop.mountUserButton", element).AsTask();
+        _js.InvokeVoidAsync("Clerk.mountUserButton", element).AsTask();
 
     public Task MountSignInAsync(ElementReference element) =>
-        _js.InvokeVoidAsync("clerkInterop.mountSignIn", element).AsTask();
+        _js.InvokeVoidAsync("Clerk.mountSignIn", element).AsTask();
 }

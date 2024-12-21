@@ -1,28 +1,16 @@
 @inject IJSRuntime JS
 @inject IClerkAuthService AuthService
 
-@if (isSignedIn)
-{
-    <div @ref="elementRef"></div>
-}
+<div @ref="elementRef"></div>
 
 @code {
     private ElementReference elementRef;
-    private bool isSignedIn;
-    private bool mounted;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            isSignedIn = await AuthService.IsUserSignedInAsync();
-            StateHasChanged();
-
-            if (isSignedIn && !mounted)
-            {
-                await JS.InvokeVoidAsync("clerkInterop.mountUserButton", elementRef);
-                mounted = true;
-            }
+            await JS.InvokeVoidAsync("clerkInterop.mountUserButton", elementRef);
         }
     }
 }

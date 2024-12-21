@@ -1,5 +1,4 @@
-@inject IClerkAuthService AuthService
-@inject IJSRuntime JS
+@inject IClerkAuthService Clerk
 
 <div @ref="elementRef"></div>
 
@@ -10,7 +9,7 @@
     {
         if (firstRender)
         {
-            await JS.InvokeVoidAsync("clerkInterop.mountSignIn", elementRef);
+            await Clerk.MountSignInAsync(elementRef);
         }
     }
 }

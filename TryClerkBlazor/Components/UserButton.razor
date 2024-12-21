@@ -1,5 +1,4 @@
-@inject IJSRuntime JS
-@inject IClerkAuthService AuthService
+@inject IClerkAuthService Clerk
 
 <div @ref="elementRef"></div>
 
@@ -10,7 +9,7 @@
     {
         if (firstRender)
         {
-            await JS.InvokeVoidAsync("clerkInterop.mountUserButton", elementRef);
+            await Clerk.MountUserButtonAsync(elementRef);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using System.Net.Http.Headers
 
 <PageTitle>Home</PageTitle>
 
@@ -50,6 +51,7 @@
 
     private string? _errorMessage;
     private WeatherForecast[]? _forecasts;
+    [Inject] private IClerkAuthService Clerk { get; set; } = null!;
 
     async Task MakeApiRequest()
     {
@@ -58,6 +60,9 @@
         try
         {
             var client = new HttpClient();
+            // Attach auth bearer token to all requests
+            var token = await Clerk.GetUserToken();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             _forecasts = await client.GetFromJsonAsync<WeatherForecast[]>("http://localhost:5232/weatherforecast");
         }
         catch (Exception ex)

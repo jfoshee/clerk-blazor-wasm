@@ -6,8 +6,61 @@
 
 <SignedIn>
     <h3>Welcome back!</h3>
+    <div>
+        <button @onclick="MakeApiRequest">Make API Request</button>
+    </div>
+    @if (!string.IsNullOrEmpty(_errorMessage))
+    {
+        <div class="alert alert-danger" role="alert">
+            @_errorMessage
+        </div>
+    }
+    @if (_forecasts != null)
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Temperature (C)</th>
+                    <th>Temperature (F)</th>
+                    <th>Summary</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var forecast in _forecasts)
+                {
+                    <tr>
+                        <td>@forecast.Date</td>
+                        <td>@forecast.TemperatureC</td>
+                        <td>@forecast.TemperatureF</td>
+                        <td>@forecast.Summary</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
 </SignedIn>
 
 <SignedOut>
     <SignIn />
 </SignedOut>
+
+@code {
+    record WeatherForecast(DateOnly Date, int TemperatureC, int TemperatureF, string? Summary);
+
+    private string? _errorMessage;
+    private WeatherForecast[]? _forecasts;
+
+    async Task MakeApiRequest()
+    {
+        try
+        {
+            var client = new HttpClient();
+            _forecasts = await client.GetFromJsonAsync<WeatherForecast[]>("http://localhost:5232/weatherforecast");
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = ex.Message;
+        }
+    }
+}

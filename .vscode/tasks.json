@@ -26,6 +26,19 @@
         "reveal": "always"
       },
       "problemMatcher": []
+    },
+    {
+      "label": "watch run Backend API",
+      "command": "dotnet",
+      "type": "shell",
+      "options": {
+        "cwd": "${workspaceFolder}/BackendApi"
+      },
+      "args": ["watch", "run"],
+      "presentation": {
+        "reveal": "always"
+      },
+      "problemMatcher": []
     }
   ]
 }

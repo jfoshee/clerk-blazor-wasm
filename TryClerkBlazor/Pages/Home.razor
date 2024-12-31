@@ -53,6 +53,8 @@
 
     async Task MakeApiRequest()
     {
+        _forecasts = null;
+        _errorMessage = null;
         try
         {
             var client = new HttpClient();

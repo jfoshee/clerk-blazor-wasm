@@ -1,4 +1,22 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAuthorization(options =>
+{
+    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+})
+.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters.ValidIssuer = "https://light-oarfish-44.clerk.accounts.dev";
+    options.TokenValidationParameters.ValidateAudience = false;
+    options.Authority = "https://light-oarfish-44.clerk.accounts.dev";
+    options.ClaimsIssuer = "https://light-oarfish-44.clerk.accounts.dev";
+    options.Validate();
+});
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -27,6 +45,9 @@ if (app.Environment.IsDevelopment())
 // Use CORS middleware
 app.UseCors("AllowAllOrigins");
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.UseHttpsRedirection();
 
 var summaries = new[]
@@ -36,7 +57,7 @@ var summaries = new[]
 
 app.MapGet("/weatherforecast", () =>
 {
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
+    var forecast = Enumerable.Range(1, 5).Select(index =>
         new WeatherForecast
         (
             DateOnly.FromDateTime(DateTime.Now.AddDays(index)),

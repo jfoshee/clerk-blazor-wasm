@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var issuer = builder.Configuration["Jwt:Issuer"];
 builder.Services.AddAuthorization(options =>
 {
     options.FallbackPolicy = new AuthorizationPolicyBuilder()
@@ -11,10 +12,10 @@ builder.Services.AddAuthorization(options =>
 })
 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
-    options.TokenValidationParameters.ValidIssuer = "https://light-oarfish-44.clerk.accounts.dev";
+    options.TokenValidationParameters.ValidIssuer = issuer;
     options.TokenValidationParameters.ValidateAudience = false;
-    options.Authority = "https://light-oarfish-44.clerk.accounts.dev";
-    options.ClaimsIssuer = "https://light-oarfish-44.clerk.accounts.dev";
+    options.Authority = issuer;
+    options.ClaimsIssuer = issuer;
     options.Validate();
 });
 

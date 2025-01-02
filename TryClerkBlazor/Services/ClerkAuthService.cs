@@ -13,8 +13,19 @@ public class ClerkAuthService(IJSRuntime js) : IClerkAuthService
     public Task<bool> IsUserSignedInAsync() =>
         _js.InvokeAsync<bool>("clerkInterop.isUserSignedIn").AsTask();
 
-    public Task<string> GetUserToken() =>
-        _js.InvokeAsync<string>("Clerk.session.getToken").AsTask();
+    public async Task<string?> GetUserToken()
+    {
+        if (await IsUserSignedInAsync())
+        {
+            return await _js.InvokeAsync<string>("Clerk.session.getToken");
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    // _js.InvokeAsync<string>("Clerk.session.getToken").AsTask();
 
     public Task MountUserButtonAsync(ElementReference element) =>
         _js.InvokeVoidAsync("Clerk.mountUserButton", element).AsTask();

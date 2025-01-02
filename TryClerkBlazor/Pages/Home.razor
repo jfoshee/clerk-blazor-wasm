@@ -7,44 +7,54 @@
 
 <SignedIn>
     <h3>Welcome back!</h3>
-    <div>
-        <button @onclick="MakeApiRequest">Make API Request</button>
-    </div>
-    @if (!string.IsNullOrEmpty(_errorMessage))
-    {
-        <div class="alert alert-danger" role="alert">
-            @_errorMessage
-        </div>
-    }
-    @if (_forecasts != null)
-    {
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Temperature (C)</th>
-                    <th>Temperature (F)</th>
-                    <th>Summary</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var forecast in _forecasts)
-                {
-                    <tr>
-                        <td>@forecast.Date</td>
-                        <td>@forecast.TemperatureC</td>
-                        <td>@forecast.TemperatureF</td>
-                        <td>@forecast.Summary</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
 </SignedIn>
 
 <SignedOut>
     <SignIn />
 </SignedOut>
+
+<div>
+    <button @onclick="MakeApiRequest">Make API Request</button>
+    <SignedIn>
+        <p>You are signed in, so it should succeed</p>
+    </SignedIn>
+    <SignedOut>
+        <p>You are signed out, so it should fail</p>
+    </SignedOut>
+</div>
+@if (!string.IsNullOrEmpty(_errorMessage))
+{
+    <div class="alert alert-danger" role="alert">
+        @_errorMessage
+    </div>
+}
+@if (_forecasts != null)
+{
+    <div class="alert alert-success" role="alert">
+        API request was successful!
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Temperature (C)</th>
+                <th>Temperature (F)</th>
+                <th>Summary</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var forecast in _forecasts)
+            {
+                <tr>
+                    <td>@forecast.Date</td>
+                    <td>@forecast.TemperatureC</td>
+                    <td>@forecast.TemperatureF</td>
+                    <td>@forecast.Summary</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
 @code {
     record WeatherForecast(DateOnly Date, int TemperatureC, int TemperatureF, string? Summary);
@@ -62,7 +72,8 @@
             var client = new HttpClient();
             // Attach auth bearer token to all requests
             var token = await Clerk.GetUserToken();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            if (token is not null)
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             _forecasts = await client.GetFromJsonAsync<WeatherForecast[]>("https://localhost:7113/weatherforecast");
         }
         catch (Exception ex)

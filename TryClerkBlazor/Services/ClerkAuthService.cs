@@ -10,8 +10,27 @@ public class ClerkAuthService(IJSRuntime js) : IClerkAuthService
     public Task InitializeAsync() =>
         _js.InvokeVoidAsync("Clerk.load").AsTask();
 
-    public Task<bool> IsUserSignedInAsync() =>
-        _js.InvokeAsync<bool>("clerkInterop.isUserSignedIn").AsTask();
+    public async Task<bool> IsUserSignedInAsync()
+    {
+        // In JS we could just check whether Clerk.user is defined,
+        // but we cannot execute arbitrary JS code from C#.
+        // And I do not want to rely on interop scripts to be present in the page.
+        // So we use JS interop to effectively check for the existence of Clerk.user
+        // by trying to invoke the `getSessions` method.
+        // We expect this method doesn't make any calls to Clerk's API,
+        // so it shouldn't result in extra traffic or delay.
+        try
+        {
+            await _js.InvokeAsync<object>("Clerk.user.getSessions").AsTask();
+            return true;
+        }
+        catch (JSException e)
+        {
+            if (e.Message.Contains("'getSessions'"))
+                return false;
+            throw;
+        }
+    }
 
     public async Task<string?> GetUserToken()
     {
@@ -24,8 +43,6 @@ public class ClerkAuthService(IJSRuntime js) : IClerkAuthService
             return null;
         }
     }
-
-    // _js.InvokeAsync<string>("Clerk.session.getToken").AsTask();
 
     public Task MountUserButtonAsync(ElementReference element) =>
         _js.InvokeVoidAsync("Clerk.mountUserButton", element).AsTask();

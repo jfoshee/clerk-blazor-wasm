@@ -26,9 +26,9 @@ public class ClerkAuthService(IJSRuntime js) : IClerkAuthService
         }
         catch (JSException e)
         {
-            if (e.Message.Contains("'getSessions'"))
-                return false;
-            throw;
+            if (!e.Message.Contains("'getSessions'"))
+                Console.Error.WriteLine(e.Message);
+            return false;
         }
     }
 
